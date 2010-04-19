@@ -9,11 +9,11 @@
 		inlineCategoryLinksList = 
 		{
 		init : function(){
-					if($_a("#relinkme-list").html() == null){
+					if($_a("#redirmap-list").html() == null){
 						return;
 					}
 					var b=this,c=$_a("#inline-list");
-					b.type=$_a("#relinkme-list").attr("className").substr(5);
+					b.type=$_a("#redirmap-list").attr("className").substr(5);
 					b.what="#"+b.type+"-";
 					b.rows=$_a("tr.list_item");
 					c.keyup(function(d){
@@ -66,7 +66,7 @@
 						update : function () { 
 							debugger;
 							var linkOrderData = $_a(this).sortable('serialize'); 
-							var linkOrder = $_a("#relinkme_category_link_order_"+d);
+							var linkOrder = $_a("#redirmap_category_link_order_"+d);
 							if(linkOrder.html() !== null){
 								$_a(linkOrder).attr("value", linkOrderData);
 							}

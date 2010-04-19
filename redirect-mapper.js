@@ -6,10 +6,10 @@
  
 (
 	function(rlmc){
-		relinkmeConfig = 
+		redirmapConfig = 
 		{
 		init : function(){
-					if(rlmc("#relinkme-list").html() == null){
+					if(rlmc("#redirmap-list").html() == null){
 						return;
 					}
 					var b=this; 
@@ -25,13 +25,13 @@
 								chx.addClass("selected");
 							}
 							chx.click(function(){
-										relinkmeConfig.updateDefault(this);
+										redirmapConfig.updateDefault(this);
 										return true
 									});
 							row.find("input.default_category_radio:first").click(function(){
 																var radio = rlmc(this);
 																var catID = radio.attr("value");
-																rlmc("#relinkme_default_category").attr("value", catID);
+																rlmc("#redirmap_default_category").attr("value", catID);
 																return true
 															})
 							})
@@ -43,17 +43,17 @@
 						if(chx.attr("checked")){
 							chx.addClass("selected");
 							radio.removeAttr("disabled");
-							if(rlmc("#relinkme_default_category").attr("value") == '0'){
+							if(rlmc("#redirmap_default_category").attr("value") == '0'){
 								radio.attr("checked", "checked");
-								rlmc("#relinkme_default_category").attr("value", catID);
+								rlmc("#redirmap_default_category").attr("value", catID);
 							}
 							
-							var linkOrder = rlmc("#relinkme_category_link_order_"+catID);
+							var linkOrder = rlmc("#redirmap_category_link_order_"+catID);
 							if(linkOrder.html() == null){
-								linkOrder = rlmc("#relinkme_category_link_order").clone(true);
-								rlmc(linkOrder).attr("id", "relinkme_category_link_order_"+catID);
+								linkOrder = rlmc("#redirmap_category_link_order").clone(true);
+								rlmc(linkOrder).attr("id", "redirmap_category_link_order_"+catID);
 								var catIndex = rlmc(chx).attr("name").substr(28);
-								rlmc(linkOrder).attr("name", "relinkme_category_link_order"+catIndex);
+								rlmc(linkOrder).attr("name", "redirmap_category_link_order"+catIndex);
 								var sortableLinks = rlmc("#category_links_list_"+catID);
 								rlmc(sortableLinks).sortable();
 								var linkOrderData = rlmc(sortableLinks).sortable('serialize');
@@ -67,11 +67,11 @@
 							radio.removeAttr("checked");
 							chx.removeClass("selected");
 							
-							if(rlmc("#relinkme_default_category").attr("value") == catID){
+							if(rlmc("#redirmap_default_category").attr("value") == catID){
 								this.findNewDefault();
 							}
 
-							var linkOrder = rlmc("#relinkme_category_link_order_"+catID);
+							var linkOrder = rlmc("#redirmap_category_link_order_"+catID);
 							if(linkOrder.html() !== null){
 								rlmc(linkOrder).remove();
 							}
@@ -83,17 +83,17 @@
 							var catID = chx.attr("value");
 							var radio = rlmc("input.default_category_radio-"+catID);
 							radio.attr("checked", "checked");
-							rlmc("#relinkme_default_category").attr("value", catID);
+							rlmc("#redirmap_default_category").attr("value", catID);
 						}
 						else{
-							rlmc("#relinkme_default_category").attr("value", '0');
+							rlmc("#redirmap_default_category").attr("value", '0');
 						}
 					}
 					
 		};
 		
 		rlmc(document).ready(function(){
-							relinkmeConfig.init()
+							redirmapConfig.init()
 						})
 	}
 )(jQuery);

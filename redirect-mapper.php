@@ -28,61 +28,61 @@ Author URI: http://www.dennisonwolfe.com/
 
 if ( is_admin() ) {
 	//plugin activation
-	add_action('activate_related-links-menu/related-links-menu.php', 'relinkme_init');
+	add_action('activate_redirect-mapper/redirect-mapper.php', 'redirmap_init');
 	//settings menu
-	add_action('admin_menu', 'relinkme_settings_menu');
+	add_action('admin_menu', 'redirmap_settings_menu');
 	//load css
-	add_action('admin_head', 'relinkme_load_stylesheets');
+	add_action('admin_head', 'redirmap_load_stylesheets');
 	//load js
-	add_action('wp_print_scripts', 'relinkme_load_scripts' );
+	add_action('wp_print_scripts', 'redirmap_load_scripts' );
 	//hook into Page Edit screen
-	add_action('admin_menu', 'relinkme_add_custom_box');
+	add_action('admin_menu', 'redirmap_add_custom_box');
 	//hook into metabox processing to perform ordering
-	add_filter('do_meta_boxes', 'relinkme_order_meta_boxes', 10, 3);
+	add_filter('do_meta_boxes', 'redirmap_order_meta_boxes', 10, 3);
 	//hook into Page/Post save action
-	add_action('save_post', 'relinkme_save_postdata');
+	add_action('save_post', 'redirmap_save_postdata');
 }
 else{
 	//load css
-	add_action('wp_head', 'relinkme_load_stylesheets');
+	add_action('wp_head', 'redirmap_load_stylesheets');
 	
 }
 
 
 /* Configuration Screen*/
 
-function relinkme_settings_menu() {
-	add_submenu_page( 'link-manager.php', 'Related Links Menu Settings', 'Related Links', 'manage_options', 'related-links-menu/related-links-menu-options.php');
+function redirmap_settings_menu() {
+	add_submenu_page( 'link-manager.php', 'Related Links Menu Settings', 'Related Links', 'manage_options', 'redirect-mapper/redirect-mapper-options.php');
 	
 	//call register settings function
-	add_action( 'admin_init', 'register_relinkme_settings' );
+	add_action( 'admin_init', 'register_redirmap_settings' );
 	$plugin = plugin_basename(__FILE__); 
-	add_filter( 'plugin_action_links_' . $plugin, 'relinkme_plugin_actions' );
+	add_filter( 'plugin_action_links_' . $plugin, 'redirmap_plugin_actions' );
 }
 
 
 /* initialize the plugin settings*/
-function relinkme_init() {
-	add_option('relinkme_show_widget', '1');
-	add_option('relinkme_default_category', '2'); //ID of blogroll
-	$relinkme_selected_categories = array('blogroll' => '2'); //assumption is this category is typically availa ble at this ID
-	add_option('relinkme_selected_categories', $relinkme_selected_categories);
-	add_option('relinkme_show_category_title', '1');
+function redirmap_init() {
+	add_option('redirmap_show_widget', '1');
+	add_option('redirmap_default_category', '2'); //ID of blogroll
+	$redirmap_selected_categories = array('blogroll' => '2'); //assumption is this category is typically availa ble at this ID
+	add_option('redirmap_selected_categories', $redirmap_selected_categories);
+	add_option('redirmap_show_category_title', '1');
 }
 
 /* register settings*/
-function register_relinkme_settings() {
-	register_setting( 'relinkme_settings', 'relinkme_show_widget' );
-	register_setting( 'relinkme_settings', 'relinkme_default_category' );
-	register_setting( 'relinkme_settings', 'relinkme_selected_categories' );
-	register_setting( 'relinkme_settings', 'relinkme_show_category_title' );
-	register_setting( 'relinkme_settings', 'relinkme_category_link_order' );
+function register_redirmap_settings() {
+	register_setting( 'redirmap_settings', 'redirmap_show_widget' );
+	register_setting( 'redirmap_settings', 'redirmap_default_category' );
+	register_setting( 'redirmap_settings', 'redirmap_selected_categories' );
+	register_setting( 'redirmap_settings', 'redirmap_show_category_title' );
+	register_setting( 'redirmap_settings', 'redirmap_category_link_order' );
 }
 
 
 /* Add Settings link to the plugins page*/
-function relinkme_plugin_actions($links) {
-    $settings_link = '<a href="link-manager.php?page=related-links-menu/related-links-menu-options.php">Settings</a>';
+function redirmap_plugin_actions($links) {
+    $settings_link = '<a href="link-manager.php?page=redirect-mapper/redirect-mapper-options.php">Settings</a>';
 
     $links = array_merge( array($settings_link), $links);
 
@@ -91,14 +91,14 @@ function relinkme_plugin_actions($links) {
 }
 
 /* Load js files*/
-function relinkme_load_scripts() {
+function redirmap_load_scripts() {
 	wp_enqueue_script('inline-links-list', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/inline-links-list.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), '1.0');
-	wp_enqueue_script('related-links-menu', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/related-links-menu.js', array('jquery'), '1.0');
+	wp_enqueue_script('redirect-mapper', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/redirect-mapper.js', array('jquery'), '1.0');
 }
 
 /* Load css files*/
-function relinkme_load_stylesheets() {
-	$style_file = plugins_url('related-links-menu/related-links-menu.css');
+function redirmap_load_stylesheets() {
+	$style_file = plugins_url('redirect-mapper/redirect-mapper.css');
 	
 	echo '<link rel="stylesheet" type="text/css" href="' . $style_file . '" />' . "\r\n";
 	
@@ -106,26 +106,26 @@ function relinkme_load_stylesheets() {
 
 
 /* Add a custom box to the Page Edit admin screen*/
-function relinkme_add_custom_box() {
-	 add_meta_box( 'relinkme_category_list', 'Related Link Categories', 'relinkme_custom_box_html', 'page', 'side', 'low' );
-	// add_meta_box( 'relinkme_category_list', 'Related Link Categories', 'relinkme_custom_box_html', 'post', 'side', 'low' );
+function redirmap_add_custom_box() {
+	 add_meta_box( 'redirmap_category_list', 'Related Link Categories', 'redirmap_custom_box_html', 'page', 'side', 'low' );
+	// add_meta_box( 'redirmap_category_list', 'Related Link Categories', 'redirmap_custom_box_html', 'post', 'side', 'low' );
 	 
 }
 
 
 /* Ordering meta box*/
-function relinkme_order_meta_boxes($page, $context, $object) {
+function redirmap_order_meta_boxes($page, $context, $object) {
     
     if (($context == 'side') && (($page == 'page') || ($page == 'post')) ) {
         // Place meta box  as the  second in order
-		relinkme_position_metabox('relinkme_category_list', $page, $context, 1);
+		redirmap_position_metabox('redirmap_category_list', $page, $context, 1);
     }
     
 }
 
 
 /* Sort meta boxes */
-function relinkme_position_metabox($id, $page = 'page', $context = 'side', $position = 1) {
+function redirmap_position_metabox($id, $page = 'page', $context = 'side', $position = 1) {
 	//handle the recursion
 	static $been_here = false;
 	
@@ -236,7 +236,7 @@ function relinkme_position_metabox($id, $page = 'page', $context = 'side', $posi
 		
 		//for some reason there was an infinite recursion scenario at some point. This static variable is in place to stop that from happening in future
 		$been_here = true;
-			relinkme_position_metabox($id, $page, $context, $position);
+			redirmap_position_metabox($id, $page, $context, $position);
 		$been_here = false;
 		
 	
@@ -245,19 +245,19 @@ function relinkme_position_metabox($id, $page = 'page', $context = 'side', $posi
 
 
 /* Add code for the Page Edit custom box*/
-function relinkme_custom_box_html() {
+function redirmap_custom_box_html() {
 	 //get previously selected categories
      global $post;
-     $selected_categories = get_post_meta($post->ID,'relinkme_categories',true);
+     $selected_categories = get_post_meta($post->ID,'redirmap_categories',true);
 	
 	if(empty($selected_categories)){
 		 $selected_categories = array();
 	}
      // use nonce for verification
-     echo '<input type="hidden" name="relinkme_noncename" id="relinkme_noncename" value="'.wp_create_nonce(plugin_basename(__FILE__)).'" />' . "\r\n";
+     echo '<input type="hidden" name="redirmap_noncename" id="redirmap_noncename" value="'.wp_create_nonce(plugin_basename(__FILE__)).'" />' . "\r\n";
 
      // The list of categories for selection
-	 $available_categories = get_option('relinkme_selected_categories');
+	 $available_categories = get_option('redirmap_selected_categories');
 	 if(!empty($available_categories)){
      ?>
 		 <ul id="categorychecklist" class="list:category categorychecklist form-no-clear">
@@ -278,7 +278,7 @@ function relinkme_custom_box_html() {
 		if(isset($selected_categories) && is_array($selected_categories)){
 			foreach ( $selected_categories as $slug => $id ) {
 				?>
-					<li id='link-category-<?php echo $id; ?>' class="category-missing" ><label class="selectit" "category-missing" for="in-link-category-<?php echo $id; ?>"><?php echo $slug; ?> missing. <a href="link-manager.php?page=related-links-menu/related-links-menu-options.php">View Options</a></label></li>
+					<li id='link-category-<?php echo $id; ?>' class="category-missing" ><label class="selectit" "category-missing" for="in-link-category-<?php echo $id; ?>"><?php echo $slug; ?> missing. <a href="link-manager.php?page=redirect-mapper/redirect-mapper-options.php">View Options</a></label></li>
 				<?php
 			}
 		}
@@ -289,12 +289,12 @@ function relinkme_custom_box_html() {
 }
 
 /* Save Related Link Categories*/
-function relinkme_save_postdata( $post_id ) {
+function redirmap_save_postdata( $post_id ) {
 
 	// verify this came from the our screen and with proper authorization,
 	// because save_post can be triggered at other times
 
-	if ( !wp_verify_nonce( $_POST['relinkme_noncename'], plugin_basename(__FILE__) )) {
+	if ( !wp_verify_nonce( $_POST['redirmap_noncename'], plugin_basename(__FILE__) )) {
 		return $post_id;
 	}
 
@@ -332,15 +332,15 @@ function relinkme_save_postdata( $post_id ) {
 		}
 		
 	}
-	update_post_meta($post_id, 'relinkme_categories', $update_categories);
+	update_post_meta($post_id, 'redirmap_categories', $update_categories);
 	
 	return $selected_categories;
 }
 
 
 /* Related Link widget*/
-class Relinkme_Widget extends WP_Widget {
-	function Relinkme_Widget() {
+class redirmap_Widget extends WP_Widget {
+	function redirmap_Widget() {
 		parent::WP_Widget(false, $name = 'Related Links');
 	}
 
@@ -370,7 +370,7 @@ class Relinkme_Widget extends WP_Widget {
 	
 	function generate_menu_items(){
 		global $post;
-		$selected_categories = get_post_meta($post->ID,'relinkme_categories',true);
+		$selected_categories = get_post_meta($post->ID,'redirmap_categories',true);
 	
 		$category_found = true;
 		if(!empty($selected_categories)){
@@ -389,12 +389,12 @@ class Relinkme_Widget extends WP_Widget {
 					
 		if(empty($selected_categories) || !$category_found){
 			$selected_categories = array();
-			$default_category = get_option('relinkme_default_category');
+			$default_category = get_option('redirmap_default_category');
 			
 			if(!empty($default_category)){
 				$category =  get_term($default_category, 'link_category');
 				if(is_null($category)){
-					$available_categories = get_option('relinkme_selected_categories');
+					$available_categories = get_option('redirmap_selected_categories');
 					if(!empty($available_categories)){
 						foreach ( $available_categories as $slug => $id ) {
 							if($id == $default_category){
@@ -422,8 +422,8 @@ class Relinkme_Widget extends WP_Widget {
 		
 		$output = '';
 		if(!empty($selected_categories)){
-			$show_category_title = get_option('relinkme_show_category_title');
-			$category_link_order = get_option('relinkme_category_link_order');
+			$show_category_title = get_option('redirmap_show_category_title');
+			$category_link_order = get_option('redirmap_category_link_order');
 			$args = array('category' => 0, 'hide_invisible' => 0, 'orderby' => 'name', 'hide_empty' => 0);
 			$displayed = array();
 			foreach ( $selected_categories as $slug => $id ) {
@@ -433,16 +433,16 @@ class Relinkme_Widget extends WP_Widget {
 				if(!empty($links)){
 					if($show_category_title){
 						$category_title = $links[0]->description;
-						$output .= "<h2 class='related_links_menu_title' id='related_links_menu_title-$id'>$category_title</h2>" . "\r\n";
+						$output .= "<h2 class='redirect_mapper_title' id='redirect_mapper_title-$id'>$category_title</h2>" . "\r\n";
 					}
 					else{
 						if(!empty($displayed)){
 							$output .= '<br class="category_separator" />' . "\r\n";
 						}
 					}
-					$output .= "<ul class='related_links_menu' id='related_links_menu-$id'>" . "\r\n";
+					$output .= "<ul class='redirect_mapper' id='redirect_mapper-$id'>" . "\r\n";
 					
-					$links = relinkme_sort_category_links($links, $category_link_order[$slug]);
+					$links = redirmap_sort_category_links($links, $category_link_order[$slug]);
 					
 					foreach ( $links as $link ) {
 						if(!isset($displayed[$link->link_name])){
@@ -465,9 +465,9 @@ class Relinkme_Widget extends WP_Widget {
 
 }
 
-add_action('widgets_init', create_function('', 'return register_widget("Relinkme_Widget");'));
+add_action('widgets_init', create_function('', 'return register_widget("redirmap_Widget");'));
 
-function relinkme_sort_category_links($links, $link_order = ''){
+function redirmap_sort_category_links($links, $link_order = ''){
 	if(!isset($links) || !is_array($links)){
 		return array();
 	}

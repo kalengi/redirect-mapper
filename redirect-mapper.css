@@ -50,12 +50,12 @@ ul#categorychecklist li.category-missing {
 
 
 /*@ Widget */
-ul.related_links_menu { 
+ul.redirect_mapper { 
 	text-transform: uppercase;
 	font-size: 11px;
 }
 
- h2.related_links_menu_title {
+ h2.redirect_mapper_title {
 	color: #000000;
 	font-weight: 900;
 	padding-top: 10px;
@@ -72,17 +72,17 @@ br.category_separator {
 }
 
 
-ul.related_links_menu li.related_link a {
+ul.redirect_mapper li.related_link a {
 	color: #6D6E71;
 }
 
 
-ul.related_links_menu li.current a, ul.related_links_menu li a:hover {
+ul.redirect_mapper li.current a, ul.redirect_mapper li a:hover {
 	background-color: transparent;
 	color: #AD5DAB;
 }
 
-ul.related_links_menu li.related_link {
+ul.redirect_mapper li.related_link {
 	border-right: 1px solid #B2C4E5;
 	margin-bottom: 0;
 	padding-top: 7px;
@@ -90,13 +90,13 @@ ul.related_links_menu li.related_link {
 	padding-right: 3px;
 }
 
-ul.related_links_menu li.current {
+ul.redirect_mapper li.current {
 	border-top: 1px solid #B2C4E5;
 	border-bottom: 1px solid #B2C4E5;
 	border-right: 0px solid #B2C4E5;
 }
 
-h2.related_links_menu_title {
+h2.redirect_mapper_title {
 	padding-right: 3px;
 }
 

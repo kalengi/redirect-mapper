@@ -22,29 +22,29 @@
 	File Information: Related Links Menu settings page
 */
 
-relinkme_settings_page();
+redirmap_settings_page();
 
-function relinkme_settings_page() {
+function redirmap_settings_page() {
 	
 	if(!empty($_POST['uninstall'])) {
-		relinkme_remove_settings();
+		redirmap_remove_settings();
 		return;
 	}
 	
-	relinkme_show_settings_page();
+	redirmap_show_settings_page();
 }
 
-function relinkme_remove_settings(){
+function redirmap_remove_settings(){
 	if($_POST['uninstall'] == 'UNINSTALL Related Links Menu'){
 		?> 
 			<div id="message" class="updated fade">
 				<?php 
-					$relinkme_options = array('Show widget' => 'relinkme_show_widget',
-											'Default Related Links Category' => 'relinkme_default_category',
-											'Related Links Categories' => 'relinkme_selected_categories',
-											'Show Category Title' => 'relinkme_show_category_title',
-											'Category Link Order' => 'relinkme_category_link_order');
-					foreach($relinkme_options as $option_key => $option_value){
+					$redirmap_options = array('Show widget' => 'redirmap_show_widget',
+											'Default Related Links Category' => 'redirmap_default_category',
+											'Related Links Categories' => 'redirmap_selected_categories',
+											'Show Category Title' => 'redirmap_show_category_title',
+											'Category Link Order' => 'redirmap_category_link_order');
+					foreach($redirmap_options as $option_key => $option_value){
 						$delete_setting = delete_option($option_value);
 						if($delete_setting) {
 							?> 
@@ -61,9 +61,9 @@ function relinkme_remove_settings(){
 			</div>
 		<?php
 		
-		$deactivate_url = 'plugins.php?action=deactivate&amp;plugin=related-links-menu%2Frelated-links-menu.php';
+		$deactivate_url = 'plugins.php?action=deactivate&amp;plugin=redirect-mapper%2Fredirect-mapper.php';
 		if(function_exists('wp_nonce_url')) { 
-			$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_related-links-menu/related-links-menu.php');
+			$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_redirect-mapper/redirect-mapper.php');
 		}
 		
 		?>
@@ -78,11 +78,11 @@ function relinkme_remove_settings(){
 }
 
 
-function relinkme_list_link_categories($default_category = '0', $category_link_order = array()) {
+function redirmap_list_link_categories($default_category = '0', $category_link_order = array()) {
 	
 	$args = array('hide_empty' => 0);
 	$categories = get_terms( 'link_category', $args );
-	$relinkme_selected_categories = get_option('relinkme_selected_categories');
+	$redirmap_selected_categories = get_option('redirmap_selected_categories');
 	
 	if ( $categories ) {
 		$output = '';
@@ -91,12 +91,12 @@ function relinkme_list_link_categories($default_category = '0', $category_link_o
 			$args = array('category' => $category->term_id, 'hide_invisible' => 0, 'orderby' => 'name', 'hide_empty' => 0);
 			$links = get_bookmarks( $args );
 			
-			$output .= "<tr id='relinkme-cat-$category->term_id' class='list_item $row_class'>" . "\r\n";
+			$output .= "<tr id='redirmap-cat-$category->term_id' class='list_item $row_class'>" . "\r\n";
 			//checkbox
 			$output .= "<th scope='row' class='check-column'>" . "\r\n";
-			$output .= "<input type='checkbox' class='category_check' name='relinkme_selected_categories[$category->slug]' ";
+			$output .= "<input type='checkbox' class='category_check' name='redirmap_selected_categories[$category->slug]' ";
 			$output .= "value='$category->term_id' ";
-			$output .= checked("$category->term_id", $relinkme_selected_categories[$category->slug], false) . ' />' . "\r\n";
+			$output .= checked("$category->term_id", $redirmap_selected_categories[$category->slug], false) . ' />' . "\r\n";
 			$output .= "</th>" . "\r\n";
 			
 			//Category name
@@ -110,13 +110,13 @@ function relinkme_list_link_categories($default_category = '0', $category_link_o
 			$output .= '</div>' . "\r\n";
 			
 			if(isset($category_link_order[$category->slug])){
-				$output .= '<input type="hidden" id="relinkme_category_link_order_' . $category->term_id . '" name="relinkme_category_link_order[' . $category->slug . ']" value="' . $category_link_order[$category->slug] . '" />' . "\r\n";
+				$output .= '<input type="hidden" id="redirmap_category_link_order_' . $category->term_id . '" name="redirmap_category_link_order[' . $category->slug . ']" value="' . $category_link_order[$category->slug] . '" />' . "\r\n";
 			}
 			
 			$output .= '<div class="hidden" id="inline_list_' . $category->term_id . '">' . "\r\n";
 			$output .= '<ul class="category_links_list " id="category_links_list_' . $category->term_id . '">' . "\r\n";
 			
-			$links = relinkme_sort_category_links($links, $category_link_order[$category->slug]);
+			$links = redirmap_sort_category_links($links, $category_link_order[$category->slug]);
 			
 			foreach ( $links as $link ) {
 				$output .= '<li class="link_title " id="category_link_' . $link->link_id . '">' . $link->link_name . '</li>' . "\r\n";
@@ -136,23 +136,23 @@ function relinkme_list_link_categories($default_category = '0', $category_link_o
 			$output .= '<input type="radio" name="default_category" ';
 			$output .= 'class="default_category_radio default_category_radio-' . $category->term_id . '" ';
 			$output .= 'value="' . $category->term_id . '" '; 
-			$output .= (checked("$category->term_id", $relinkme_selected_categories[$category->slug], false) == '') ? 'disabled' : ''; 
-			$output .= ' ' . checked($default_category, $relinkme_selected_categories[$category->slug], false) . ' />' . "\r\n";
+			$output .= (checked("$category->term_id", $redirmap_selected_categories[$category->slug], false) == '') ? 'disabled' : ''; 
+			$output .= ' ' . checked($default_category, $redirmap_selected_categories[$category->slug], false) . ' />' . "\r\n";
 			$output .= '</td>' . "\r\n";
 			
 			$output .= "</tr>" . "\r\n";
 			
 			$row_class = ($row_class == 'alternate') ? '' : 'alternate';
 			
-			if(isset($relinkme_selected_categories[$category->slug])){
-				unset($relinkme_selected_categories[$category->slug]);
+			if(isset($redirmap_selected_categories[$category->slug])){
+				unset($redirmap_selected_categories[$category->slug]);
 			}
 		}
 		
-		if(isset($relinkme_selected_categories) && is_array($relinkme_selected_categories)){
+		if(isset($redirmap_selected_categories) && is_array($redirmap_selected_categories)){
 			$transfer_default = false;
-			foreach ( $relinkme_selected_categories as $slug => $term_id ) {
-				$output .= "<tr id='relinkme-cat-missing-$term_id' class='list_item_missing $row_class'>" . "\r\n";
+			foreach ( $redirmap_selected_categories as $slug => $term_id ) {
+				$output .= "<tr id='redirmap-cat-missing-$term_id' class='list_item_missing $row_class'>" . "\r\n";
 				
 				$output .= "<th scope='row' class='check-column'>&nbsp;" . "\r\n";
 				$output .= "</th>" . "\r\n";
@@ -176,7 +176,7 @@ function relinkme_list_link_categories($default_category = '0', $category_link_o
 			
 			if($transfer_default){
 				$output .= '<script type="text/javascript" defer="defer">' . "\r\n";
-				$output .= '	(function(rlmc){rlmc(document).ready(function(){relinkmeConfig.findNewDefault();})})(jQuery);' . "\r\n";
+				$output .= '	(function(rlmc){rlmc(document).ready(function(){redirmapConfig.findNewDefault();})})(jQuery);' . "\r\n";
 				$output .= '</script>' . "\r\n";
 			}
 		}
@@ -189,16 +189,16 @@ function relinkme_list_link_categories($default_category = '0', $category_link_o
 	
 }
 
-function relinkme_show_settings_page() {
+function redirmap_show_settings_page() {
 	?>
 		<!-- Options Form -->
 		<form method="post" action="options.php">
-			<?php settings_fields( 'relinkme_settings' ); ?>
-			<?php $relinkme_show_widget = get_option('relinkme_show_widget'); ?>
-			<?php $relinkme_show_category_title = get_option('relinkme_show_category_title'); ?>
-			<?php $relinkme_default_category = get_option('relinkme_default_category'); ?>
-			<?php $relinkme_category_link_order = get_option('relinkme_category_link_order'); ?>
-			<?php $link_categories = relinkme_list_link_categories($relinkme_default_category, $relinkme_category_link_order);?>
+			<?php settings_fields( 'redirmap_settings' ); ?>
+			<?php $redirmap_show_widget = get_option('redirmap_show_widget'); ?>
+			<?php $redirmap_show_category_title = get_option('redirmap_show_category_title'); ?>
+			<?php $redirmap_default_category = get_option('redirmap_default_category'); ?>
+			<?php $redirmap_category_link_order = get_option('redirmap_category_link_order'); ?>
+			<?php $link_categories = redirmap_list_link_categories($redirmap_default_category, $redirmap_category_link_order);?>
 			<div class="wrap">
 				<?php screen_icon(); ?>
 				<h2>Related Links Menu Options</h2>
@@ -224,24 +224,24 @@ function relinkme_show_settings_page() {
 								</tr>
 							</tfoot>
 
-							<tbody id="relinkme-list" class="list:relinkme-cat">
+							<tbody id="redirmap-list" class="list:redirmap-cat">
 								<?php echo $link_categories; ?>	
 							</tbody>
 						</table>
 
 						<table class="form-table">
-							<input type="hidden" id="relinkme_category_link_order" name="relinkme_category_link_order[_dummy_slug]" value="<?php echo $relinkme_category_link_order['_dummy_slug']; ?>" />
-							<input type="hidden" id="relinkme_default_category" name="relinkme_default_category" value="<?php echo ($relinkme_default_category == '') ? '0' : $relinkme_default_category; ?>" />
+							<input type="hidden" id="redirmap_category_link_order" name="redirmap_category_link_order[_dummy_slug]" value="<?php echo $redirmap_category_link_order['_dummy_slug']; ?>" />
+							<input type="hidden" id="redirmap_default_category" name="redirmap_default_category" value="<?php echo ($redirmap_default_category == '') ? '0' : $redirmap_default_category; ?>" />
 							<tr valign="top">
 								<th scope="row">Show Widget</th>
 								<td>
-									<input name="relinkme_show_widget" type="checkbox" value="1" <?php checked('1', $relinkme_show_widget); ?> />
+									<input name="redirmap_show_widget" type="checkbox" value="1" <?php checked('1', $redirmap_show_widget); ?> />
 								</td>
 							</tr>
 							<tr valign="top">
 								<th scope="row">Show Category Title</th>
 								<td>
-									<input name="relinkme_show_category_title" type="checkbox" value="1" <?php checked('1', $relinkme_show_category_title); ?> />
+									<input name="redirmap_show_category_title" type="checkbox" value="1" <?php checked('1', $redirmap_show_category_title); ?> />
 								</td>
 							</tr>
 						</table>
@@ -292,7 +292,7 @@ function relinkme_show_settings_page() {
 		
 		<!-- Uninstall Plugin -->
 		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=<?php echo plugin_basename(__FILE__); ?>">
-			<div id="relinkme_uninstall" class="wrap"> 
+			<div id="redirmap_uninstall" class="wrap"> 
 				<h3>Uninstall Related Links Menu plugin</h3>
 				<p>
 					The uninstall action removes all Related Links Menu plugin settings that have been saved in your WordPress database. Use this prior to deactivating the plugin.
