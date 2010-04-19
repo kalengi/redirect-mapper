@@ -1,0 +1,104 @@
+/*
+File:			related-links-menu.css
+Description:	Custom styles for Related Links Menu Plugin
+Version:  1.0
+
+*/
+
+
+/*@ Options screen */
+ul.category_links_list {
+	list-style-type: none; 
+	margin: 0; 
+	padding: 0;
+}
+
+ul.category_links_list li{ 
+	margin: 0 5px 5px 5px; 
+	padding: 5px; 
+	font-size: 1.2em; 
+	height: 1.5em;
+	cursor: move;
+	background-color: #DFDFDF;
+	border: 1px solid #BFBFBF;
+}
+
+tr.list_item_missing td.column-description {
+	color: red;
+}
+
+span.error_message{
+	color: red;
+	display: none;
+}
+
+span.info_message{
+	color: #7E7E7E;
+}
+
+/* @end */
+
+
+/*@ Meta box */
+ul#categorychecklist li.category-missing { 
+	color: red;
+	margin-left: 26px;
+}
+
+
+/* @end */
+
+
+/*@ Widget */
+ul.related_links_menu { 
+	text-transform: uppercase;
+	font-size: 11px;
+}
+
+ h2.related_links_menu_title {
+	color: #000000;
+	font-weight: 900;
+	padding-top: 10px;
+	line-height: 1.08em;
+	font-variant: normal;
+	text-transform: uppercase;
+	font-size: 11px;
+	border-right: 1px solid #B2C4E5;
+}
+
+br.category_separator { 
+	display: block;
+	border: 1px solid green;
+}
+
+
+ul.related_links_menu li.related_link a {
+	color: #6D6E71;
+}
+
+
+ul.related_links_menu li.current a, ul.related_links_menu li a:hover {
+	background-color: transparent;
+	color: #AD5DAB;
+}
+
+ul.related_links_menu li.related_link {
+	border-right: 1px solid #B2C4E5;
+	margin-bottom: 0;
+	padding-top: 7px;
+	padding-bottom: 5px;
+	padding-right: 3px;
+}
+
+ul.related_links_menu li.current {
+	border-top: 1px solid #B2C4E5;
+	border-bottom: 1px solid #B2C4E5;
+	border-right: 0px solid #B2C4E5;
+}
+
+h2.related_links_menu_title {
+	padding-right: 3px;
+}
+
+/* @end */
+
