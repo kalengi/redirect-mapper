@@ -19,7 +19,7 @@
 
 
 /* 
-	File Information: Related Links Menu settings page
+	File Information: Redirect Mapper settings page
 */
 
 redirmap_settings_page();
@@ -35,7 +35,7 @@ function redirmap_settings_page() {
 }
 
 function redirmap_remove_settings(){
-	if($_POST['uninstall'] == 'UNINSTALL Related Links Menu'){
+	if($_POST['uninstall'] == 'UNINSTALL Redirect Mapper'){
 		?> 
 			<div id="message" class="updated fade">
 				<?php 
@@ -68,7 +68,7 @@ function redirmap_remove_settings(){
 		
 		?>
 			<div class="wrap">
-				<h2>Deactivate Related Links Menu</h2>
+				<h2>Deactivate Redirect Mapper</h2>
 				<p class="deactivation_message">
 					<a href="<?php echo $deactivate_url; ?>">Click Here</a> to deactivate the plugin automatically
 				</p>
@@ -201,7 +201,7 @@ function redirmap_show_settings_page() {
 			<?php $link_categories = redirmap_list_link_categories($redirmap_default_category, $redirmap_category_link_order);?>
 			<div class="wrap">
 				<?php screen_icon(); ?>
-				<h2>Related Links Menu Options</h2>
+				<h2>Redirect Mapper Options</h2>
 				<h3>Select Link Categories</h3>
 				
 				<?php if(!empty($link_categories)){?>
@@ -293,15 +293,15 @@ function redirmap_show_settings_page() {
 		<!-- Uninstall Plugin -->
 		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=<?php echo plugin_basename(__FILE__); ?>">
 			<div id="redirmap_uninstall" class="wrap"> 
-				<h3>Uninstall Related Links Menu plugin</h3>
+				<h3>Uninstall Redirect Mapper plugin</h3>
 				<p>
-					The uninstall action removes all Related Links Menu plugin settings that have been saved in your WordPress database. Use this prior to deactivating the plugin.
+					The uninstall action removes all Redirect Mapper plugin settings that have been saved in your WordPress database. Use this prior to deactivating the plugin.
 				</p>
 				<p class="warning">
 					Please note that the deleted settings cannot be recovered. Proceed only if you do not wish to use these settings any more.
 				</p>
 				<p class="uninstall_confirmation">
-					<input type="submit" name="uninstall" value="UNINSTALL Related Links Menu" class="button" onclick="return confirm('You Are About To Uninstall Related Links Menu From WordPress.\n\n Choose [Cancel] To Stop, [OK] To Uninstall.')" />
+					<input type="submit" name="uninstall" value="UNINSTALL Redirect Mapper" class="button" onclick="return confirm('You Are About To Uninstall Redirect Mapper From WordPress.\n\n Choose [Cancel] To Stop, [OK] To Uninstall.')" />
 				</p>
 			</div> 
 		</form>

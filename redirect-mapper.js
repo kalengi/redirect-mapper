@@ -1,5 +1,5 @@
 /*
- * Script for Related Links Menu config screen
+ * Script for Redirect Mapper config screen
  * Version:  1.0
  * Author : Dennison+Wolfe Internet Group
  */ 

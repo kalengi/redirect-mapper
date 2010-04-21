@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Related Links Menu 
+Plugin Name: Redirect Mapper 
 Plugin URI: http://www.dennisonwolfe.com/
-Description: The  Related Links Menu plugin places links from selected Link Categories into a sidebar.
-Version: 1.2.1
+Description: The  Redirect Mapper plugin provides a visiual interface to aid the  mapping of old links to new links.
+Version: 1.0.0
 Author: Dennison+Wolfe Internet Group
 Author URI: http://www.dennisonwolfe.com/
 */
@@ -52,7 +52,7 @@ else{
 /* Configuration Screen*/
 
 function redirmap_settings_menu() {
-	add_submenu_page( 'link-manager.php', 'Related Links Menu Settings', 'Related Links', 'manage_options', 'redirect-mapper/redirect-mapper-options.php');
+	add_submenu_page( 'link-manager.php', 'Redirect Mapper Settings', 'Related Links', 'manage_options', 'redirect-mapper/redirect-mapper-options.php');
 	
 	//call register settings function
 	add_action( 'admin_init', 'register_redirmap_settings' );
