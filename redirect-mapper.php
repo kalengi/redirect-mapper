@@ -52,7 +52,7 @@ else{
 /* Configuration Screen*/
 
 function redirmap_settings_menu() {
-	add_submenu_page( 'link-manager.php', 'Redirect Mapper Settings', 'Related Links', 'manage_options', 'redirect-mapper/redirect-mapper-options.php');
+	add_submenu_page( 'tools.php', 'Redirect Mapper Settings', 'Redirect Mapper', 'manage_options', 'redirect-mapper/redirect-mapper-ui.php');
 	
 	//call register settings function
 	add_action( 'admin_init', 'register_redirmap_settings' );
@@ -82,7 +82,7 @@ function register_redirmap_settings() {
 
 /* Add Settings link to the plugins page*/
 function redirmap_plugin_actions($links) {
-    $settings_link = '<a href="link-manager.php?page=redirect-mapper/redirect-mapper-options.php">Settings</a>';
+    $settings_link = '<a href="link-manager.php?page=redirect-mapper/redirect-mapper-ui.php">Settings</a>';
 
     $links = array_merge( array($settings_link), $links);
 
@@ -278,7 +278,7 @@ function redirmap_custom_box_html() {
 		if(isset($selected_categories) && is_array($selected_categories)){
 			foreach ( $selected_categories as $slug => $id ) {
 				?>
-					<li id='link-category-<?php echo $id; ?>' class="category-missing" ><label class="selectit" "category-missing" for="in-link-category-<?php echo $id; ?>"><?php echo $slug; ?> missing. <a href="link-manager.php?page=redirect-mapper/redirect-mapper-options.php">View Options</a></label></li>
+					<li id='link-category-<?php echo $id; ?>' class="category-missing" ><label class="selectit" "category-missing" for="in-link-category-<?php echo $id; ?>"><?php echo $slug; ?> missing. <a href="link-manager.php?page=redirect-mapper/redirect-mapper-ui.php">View Options</a></label></li>
 				<?php
 			}
 		}
