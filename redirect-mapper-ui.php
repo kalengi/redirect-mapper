@@ -19,7 +19,7 @@
 
 
 /* 
-	File Information: Redirect Mapper settings page
+	File Information: Redirect Mapper ui page
 */
 
 redirmap_settings_page();
@@ -28,6 +28,18 @@ function redirmap_settings_page() {
 	
 	if(!empty($_POST['uninstall'])) {
 		redirmap_remove_settings();
+		return;
+	}
+	//print '<div>Post values: ' . print_r($_POST, 1) . '</div><br><br>' . "\r\n";
+	//exit;
+	if(!empty($_POST['verify'])) {
+		redirmap_show_verification_page();
+		return;
+	}
+	
+	
+	if(!empty($_POST['map'])) {
+		redirmap_show_mapping_page();
 		return;
 	}
 	
@@ -192,7 +204,7 @@ function redirmap_list_link_categories($default_category = '0', $category_link_o
 function redirmap_show_settings_page() {
 	?>
 		<!-- Options Form -->
-		<form method="post" action="options.php">
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=<?php echo plugin_basename(__FILE__); ?>">
 			<?php settings_fields( 'redirmap_settings' ); ?>
 			<?php $redirmap_show_widget = get_option('redirmap_show_widget'); ?>
 			<?php $redirmap_show_category_title = get_option('redirmap_show_category_title'); ?>
@@ -247,7 +259,10 @@ function redirmap_show_settings_page() {
 						</table>
 						
 						<p class="submit">
-							<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+							<input type="submit" name="verify" class="button-primary" value="<?php _e('Verify redirection urls') ?>" />
+						</p>
+						<p class="submit">
+							<input type="submit" name="map" class="button-primary" value="<?php _e('Map urls') ?>" />
 						</p>
 				<?php 
 				} 
@@ -305,6 +320,66 @@ function redirmap_show_settings_page() {
 				</p>
 			</div> 
 		</form>
+	<?php
+}
+
+function redirmap_show_verification_page() {
+	?>
+		<!-- Verification page -->
+		
+		<div class="wrap">
+			<?php screen_icon(); ?>
+			<h2>Redirect Mapper: Verify Urls</h2>
+			<div id="redirmap-nav-url" class="verify">
+				<h3 id="current-url"><?php echo $_SERVER['PHP_SELF']; ?></h3>
+				<input type="button" name="previous" value="Previous" class="button" onclick="return confirm('Previous')" />
+				<input type="button" name="next" value="Next" class="button" onclick="return confirm('Next')" />
+			</div>
+			<div id="redirmap-search-post" class="verify">
+				Search for post having text: 
+				<input type="text" class="search-input" name="search" value="" />
+				<input type="button" name="search" value="Search" class="button" onclick="return confirm('Search')" />
+			</div>
+			<div id="redirmap-verify-post" class="verify">
+				<div id="redirmap-search-results" class="verify">
+					<p>Search results: </p>
+					<ul>
+						<li><a href="#">First search result</a></li>
+						<li><a href="#">Second search result</a></li>
+					</ul>
+				</div>
+				<div id="redirmap-original-post" class="verify">
+					<p>Original page: </p>
+					<embed id="redirmap-original-post-page" src="http://www.ojaipost.com/2010/02/happy_birthday_ojai_post_1.shtml" > 
+						 
+					</embed>
+				</div>
+				
+			</div>
+			<div id="redirmap-matching-urls" class="verify">
+				
+			</div>
+			<div id="redirmap-new-post" class="verify">
+				<p>Current search url page: </p>
+					<embed id="redirmap-search-url-page" src="http://staging.ojaipost.nerdonia:8040/2010/02/happy-birthday-ojai-post-3/" > 
+						 
+					</embed>
+			</div>
+			<div id="redirmap-save-match" class="verify">
+				<input type="button" name="save_match" value="Save Match" class="button" onclick="return confirm('Save Match')" />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				Current search url: 
+				<input type="text" id="search_match" class="search-input" name="search_match" value="" />
+				<input type="button" name="copy_search_match" value="Copy" class="button" onclick="return confirm('Copy Search Match')" />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				Original url: 
+				<input type="text" id="original_url" class="search-input" name="original_url" value="" />
+				<input type="button" name="copy_original_url" value="Copy" class="button" onclick="return confirm('Copy Original Url')" />
+			</div>
+			
+		</div>
+		
+		
 	<?php
 }
 

@@ -52,7 +52,7 @@ else{
 /* Configuration Screen*/
 
 function redirmap_settings_menu() {
-	add_submenu_page( 'tools.php', 'Redirect Mapper Settings', 'Redirect Mapper', 'manage_options', 'redirect-mapper/redirect-mapper-ui.php');
+	add_submenu_page( 'tools.php', 'Redirect Mapper UI', 'Redirect Mapper', 'manage_options', 'redirect-mapper/redirect-mapper-ui.php');
 	
 	//call register settings function
 	add_action( 'admin_init', 'register_redirmap_settings' );

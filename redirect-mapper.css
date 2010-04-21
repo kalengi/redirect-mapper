@@ -6,26 +6,72 @@ Version:  1.0
 */
 
 
-/*@ Options screen */
-ul.category_links_list {
-	list-style-type: none; 
-	margin: 0; 
-	padding: 0;
+/*@ verification screen */
+
+
+div#redirmap-nav-url{
+	text-align: right;
 }
 
-ul.category_links_list li{ 
-	margin: 0 5px 5px 5px; 
-	padding: 5px; 
-	font-size: 1.2em; 
-	height: 1.5em;
-	cursor: move;
-	background-color: #DFDFDF;
-	border: 1px solid #BFBFBF;
+div#redirmap-search-post{
+	font-weight: 900;
 }
 
-tr.list_item_missing td.column-description {
-	color: red;
+div#redirmap-search-post input.search-input{
+	width: 500px;
 }
+
+div#redirmap-verify-post{
+	float: left;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	color: #3C5FAC;
+	font-weight: 900;
+}
+
+div#redirmap-search-results {
+	float: left;
+	border: 1px solid #CCCCCC;
+}
+div#redirmap-search-results ul{
+	margin-left: 15px;
+	margin-right: 20px;
+	width: 250px;
+	list-style: disc;
+}
+
+div#redirmap-original-post {
+	float: left;
+	margin-left: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+div#redirmap-original-post embed#redirmap-original-post-page {
+	width: 750px;
+	height: 400px;
+}
+
+div#redirmap-matching-urls {
+	clear: both;
+}
+
+div#redirmap-new-post  {
+	margin-top: 10px;
+	margin-bottom: 15px;
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	color: #3C5FAC;
+	font-weight: 900;
+}
+
+div#redirmap-new-post embed#redirmap-search-url-page {
+	width: 950px;
+	height: 400px;
+}
+
+/* @end */
+
+/*@ messages */
 
 span.error_message{
 	color: red;
@@ -39,66 +85,5 @@ span.info_message{
 /* @end */
 
 
-/*@ Meta box */
-ul#categorychecklist li.category-missing { 
-	color: red;
-	margin-left: 26px;
-}
 
-
-/* @end */
-
-
-/*@ Widget */
-ul.redirect_mapper { 
-	text-transform: uppercase;
-	font-size: 11px;
-}
-
- h2.redirect_mapper_title {
-	color: #000000;
-	font-weight: 900;
-	padding-top: 10px;
-	line-height: 1.08em;
-	font-variant: normal;
-	text-transform: uppercase;
-	font-size: 11px;
-	border-right: 1px solid #B2C4E5;
-}
-
-br.category_separator { 
-	display: block;
-	border: 1px solid green;
-}
-
-
-ul.redirect_mapper li.related_link a {
-	color: #6D6E71;
-}
-
-
-ul.redirect_mapper li.current a, ul.redirect_mapper li a:hover {
-	background-color: transparent;
-	color: #AD5DAB;
-}
-
-ul.redirect_mapper li.related_link {
-	border-right: 1px solid #B2C4E5;
-	margin-bottom: 0;
-	padding-top: 7px;
-	padding-bottom: 5px;
-	padding-right: 3px;
-}
-
-ul.redirect_mapper li.current {
-	border-top: 1px solid #B2C4E5;
-	border-bottom: 1px solid #B2C4E5;
-	border-right: 0px solid #B2C4E5;
-}
-
-h2.redirect_mapper_title {
-	padding-right: 3px;
-}
-
-/* @end */
 
