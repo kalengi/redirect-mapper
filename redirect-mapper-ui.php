@@ -323,7 +323,45 @@ function redirmap_show_settings_page() {
 	<?php
 }
 
+function get_404_links_list(){
+	//load 404 list
+	
+	$links_file = WP_CONTENT_DIR  . '/redirect-mapper/the_ojai_post_404_list.txt';
+	$contents = file_get_contents($links_file) or die("can't read from 404 list file");
+	$_404_links = explode("\r\n", $contents);
+	$js_404_links = array();
+	
+	foreach($_404_links as $_404_link){
+		$_404_link = explode('||', $_404_link);
+		
+		$js_404_link = array();
+		$js_404_link[] = '"original_url":"' . str_replace('"', '\"', $_404_link[0]) . '"';
+		$js_404_link[] = '"new_url":"' . str_replace('"', '\"', $_404_link[1]) . '"';
+		$js_404_link[] = '"post_title":"' . str_replace('"', '\"', $_404_link[4]) . '"';
+		
+		$js_404_links[] = "{" . implode(",",$js_404_link) . "}";
+		
+	}	
+	
+	//$js_404_links_holder = '';
+	if(empty($js_404_links)){
+		die("The 404 list file is empty");
+	}
+	return '[' . implode(",", $js_404_links) . "]";
+	
+}
+
 function redirmap_show_verification_page() {
+	$js_404_links_list = get_404_links_list(); 
+	
+	?>
+		<script type="text/javascript">
+			//<![CDATA[ 
+				var js_404_links_list = <?php echo $js_404_links_list; ?>;
+			//]]>
+		</script>
+	<?php
+	
 	?>
 		<!-- Verification page -->
 		
@@ -332,13 +370,13 @@ function redirmap_show_verification_page() {
 			<h2>Redirect Mapper: Verify Urls</h2>
 			<div id="redirmap-nav-url" class="verify">
 				<h3 id="current-url"><?php echo $_SERVER['PHP_SELF']; ?></h3>
-				<input type="button" name="previous" value="Previous" class="button" onclick="return confirm('Previous')" />
-				<input type="button" name="next" value="Next" class="button" onclick="return confirm('Next')" />
+				<input type="button" id="previous" name="previous" value="Previous" class="button" />
+				<input type="button" id="next" name="next" value="Next" class="button"  />
 			</div>
 			<div id="redirmap-search-post" class="verify">
 				Search for post having text: 
-				<input type="text" class="search-input" name="search" value="" />
-				<input type="button" name="search" value="Search" class="button" onclick="return confirm('Search')" />
+				<input type="text" id="search" class="search-input" name="search" value="" />
+				<input type="button" id="search_button" name="search_button" value="Search" class="button" onclick="return confirm('Search')" />
 			</div>
 			<div id="redirmap-verify-post" class="verify">
 				<div id="redirmap-search-results" class="verify">
@@ -350,9 +388,9 @@ function redirmap_show_verification_page() {
 				</div>
 				<div id="redirmap-original-post" class="verify">
 					<p>Original page: </p>
-					<embed id="redirmap-original-post-page" src="http://www.ojaipost.com/2010/02/happy_birthday_ojai_post_1.shtml" > 
+					<object id="redirmap-original-post-page" type="text/html" data="" > 
 						 
-					</embed>
+					</object>
 				</div>
 				
 			</div>
@@ -361,7 +399,7 @@ function redirmap_show_verification_page() {
 			</div>
 			<div id="redirmap-new-post" class="verify">
 				<p>Current search url page: </p>
-					<embed id="redirmap-search-url-page" src="http://staging.ojaipost.nerdonia:8040/2010/02/happy-birthday-ojai-post-3/" > 
+					<embed id="redirmap-search-url-page" src="" > 
 						 
 					</embed>
 			</div>

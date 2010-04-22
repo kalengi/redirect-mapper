@@ -1,65 +1,84 @@
 /*
- * Script for Redirect Mapper config screen
+ * Script for Redirect Mapper UI
  * Version:  1.0
  * Author : Dennison+Wolfe Internet Group
  */ 
  
 (
-	function(rlmc){
-		redirmapConfig = 
+	function(rdmap){
+		rdmapVerify = 
 		{
+		current404: 0,
+		max404: 0,
 		init : function(){
-					if(rlmc("#redirmap-list").html() == null){
+					if(rdmap("#redirmap-original-post-page").html() == null){
 						return;
 					}
-					var b=this; 
-					b.rows=rlmc("tr.list_item");
-					b.addEvents(b.rows);
+					var b=rdmapVerify;
+					b.max404 = js_404_links_list.length-1;
+					b.current404 = 0
+					rdmap("#previous").click(function(){
+												var b=rdmapVerify;
+												if(b.current404 <= 0){
+													b.current404 = 0;
+												}
+												else{
+													b.current404--;
+												}
+												b.loadCurrentPage();
+												return true;
+											})
+					rdmap("#next").click(function(){
+												var b=rdmapVerify;
+												if(b.current404 >= b.max404){
+													b.current404 = b.max404;
+												}
+												else{
+													b.current404++;
+												}
+												b.loadCurrentPage();
+												return true;
+											})
+					//debugger;
+					b.loadCurrentPage();
+					return;
 					
 				},
-		addEvents : function(b){
-						b.each(function(){
-							row = rlmc(this);
-							var chx = rlmc(row.find("input.category_check:first"));
-							if(chx.attr("checked")){
-								chx.addClass("selected");
-							}
-							chx.click(function(){
-										redirmapConfig.updateDefault(this);
-										return true
-									});
-							row.find("input.default_category_radio:first").click(function(){
-																var radio = rlmc(this);
-																var catID = radio.attr("value");
-																rlmc("#redirmap_default_category").attr("value", catID);
-																return true
-															})
-							})
+		loadCurrentPage : function(){
+						//debugger
+						var b=this;
+						var currentPage = js_404_links_list[b.current404];
+						rdmap("#current-url").html(currentPage.original_url);
+						rdmap("#search").attr("value", currentPage.post_title);
+						rdmap("#redirmap-original-post-page").attr("data", currentPage.original_url);
+						//var theHTML = rdmap("#redirmap-original-post").html();
+						//rdmap("#redirmap-original-post-page").remove();
+						//rdmap("#redirmap-original-post").html(theHTML);
 					},
 		updateDefault : function(chx){
-						chx = rlmc(chx);
+						chx = rdmap(chx);
 						var catID = chx.attr("value");
-						var radio = rlmc("input.default_category_radio-"+catID);
+						var radio = rdmap("input.default_category_radio-"+catID);
 						if(chx.attr("checked")){
 							chx.addClass("selected");
 							radio.removeAttr("disabled");
-							if(rlmc("#redirmap_default_category").attr("value") == '0'){
+							if(rdmap("#rdmap_default_category").attr("value") == '0'){
 								radio.attr("checked", "checked");
-								rlmc("#redirmap_default_category").attr("value", catID);
+								rdmap("#rdmap_default_category").attr("value", catID);
 							}
 							
-							var linkOrder = rlmc("#redirmap_category_link_order_"+catID);
+							var linkOrder = rdmap("#rdmap_category_link_order_"+catID);
 							if(linkOrder.html() == null){
-								linkOrder = rlmc("#redirmap_category_link_order").clone(true);
-								rlmc(linkOrder).attr("id", "redirmap_category_link_order_"+catID);
-								var catIndex = rlmc(chx).attr("name").substr(28);
-								rlmc(linkOrder).attr("name", "redirmap_category_link_order"+catIndex);
-								var sortableLinks = rlmc("#category_links_list_"+catID);
-								rlmc(sortableLinks).sortable();
-								var linkOrderData = rlmc(sortableLinks).sortable('serialize');
-								rlmc(linkOrder).attr("value", linkOrderData);
-								var linkOrderPos = rlmc("#inline_list_"+catID);
-								rlmc(linkOrderPos).before(linkOrder);
+								linkOrder = rdmap("#rdmap_category_link_order").clone(true);
+								rdmap(linkOrder).attr("id", "rdmap_category_link_order_"+catID);
+								var catIndex = rdmap(chx).attr("name").substr(28);
+								rdmap(linkOrder).attr("name", "rdmap_category_link_order"+catIndex);
+								var sortableLinks = rdmap("#category_links_list_"+catID);
+								rdmap(sortableLinks).sortable();
+								var linkOrderData = rdmap(sortableLinks).sortable('serialize');
+								rdmap(linkOrder).attr("value", linkOrderData);
+								var linkOrderPos = rdmap("#inline_list_"+catID);
+								rdmap(linkOrderPos).before(linkOrder);
 							}
 						}
 						else{
@@ -67,33 +86,33 @@
 							radio.removeAttr("checked");
 							chx.removeClass("selected");
 							
-							if(rlmc("#redirmap_default_category").attr("value") == catID){
+							if(rdmap("#rdmap_default_category").attr("value") == catID){
 								this.findNewDefault();
 							}
 
-							var linkOrder = rlmc("#redirmap_category_link_order_"+catID);
+							var linkOrder = rdmap("#rdmap_category_link_order_"+catID);
 							if(linkOrder.html() !== null){
-								rlmc(linkOrder).remove();
+								rdmap(linkOrder).remove();
 							}
 						}
 					},
 		findNewDefault : function(){
-						var chx =  rlmc("input.category_check.selected:first");
+						var chx =  rdmap("input.category_check.selected:first");
 						if(chx.html() !== null){
 							var catID = chx.attr("value");
-							var radio = rlmc("input.default_category_radio-"+catID);
+							var radio = rdmap("input.default_category_radio-"+catID);
 							radio.attr("checked", "checked");
-							rlmc("#redirmap_default_category").attr("value", catID);
+							rdmap("#rdmap_default_category").attr("value", catID);
 						}
 						else{
-							rlmc("#redirmap_default_category").attr("value", '0');
+							rdmap("#rdmap_default_category").attr("value", '0');
 						}
 					}
 					
 		};
 		
-		rlmc(document).ready(function(){
-							redirmapConfig.init()
+		rdmap(document).ready(function(){
+							rdmapVerify.init()
 						})
 	}
 )(jQuery);

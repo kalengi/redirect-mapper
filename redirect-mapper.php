@@ -30,17 +30,18 @@ if ( is_admin() ) {
 	//plugin activation
 	add_action('activate_redirect-mapper/redirect-mapper.php', 'redirmap_init');
 	//settings menu
-	add_action('admin_menu', 'redirmap_settings_menu');
+	add_action('admin_menu', 'redirmap_tools_menu');
 	//load css
 	add_action('admin_head', 'redirmap_load_stylesheets');
 	//load js
 	add_action('wp_print_scripts', 'redirmap_load_scripts' );
+	
 	//hook into Page Edit screen
-	add_action('admin_menu', 'redirmap_add_custom_box');
+	//add_action('admin_menu', 'redirmap_add_custom_box');
 	//hook into metabox processing to perform ordering
-	add_filter('do_meta_boxes', 'redirmap_order_meta_boxes', 10, 3);
+	//add_filter('do_meta_boxes', 'redirmap_order_meta_boxes', 10, 3);
 	//hook into Page/Post save action
-	add_action('save_post', 'redirmap_save_postdata');
+	//add_action('save_post', 'redirmap_save_postdata');
 }
 else{
 	//load css
@@ -49,9 +50,9 @@ else{
 }
 
 
-/* Configuration Screen*/
+/* Control Screen*/
 
-function redirmap_settings_menu() {
+function redirmap_tools_menu() {
 	add_submenu_page( 'tools.php', 'Redirect Mapper UI', 'Redirect Mapper', 'manage_options', 'redirect-mapper/redirect-mapper-ui.php');
 	
 	//call register settings function
@@ -92,7 +93,7 @@ function redirmap_plugin_actions($links) {
 
 /* Load js files*/
 function redirmap_load_scripts() {
-	wp_enqueue_script('inline-links-list', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/inline-links-list.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), '1.0');
+	//wp_enqueue_script('inline-links-list', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/inline-links-list.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), '1.0');
 	wp_enqueue_script('redirect-mapper', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/redirect-mapper.js', array('jquery'), '1.0');
 }
 
@@ -105,15 +106,15 @@ function redirmap_load_stylesheets() {
 }
 
 
-/* Add a custom box to the Page Edit admin screen*/
+/* Add a custom box to the Page Edit admin screen
 function redirmap_add_custom_box() {
 	 add_meta_box( 'redirmap_category_list', 'Related Link Categories', 'redirmap_custom_box_html', 'page', 'side', 'low' );
 	// add_meta_box( 'redirmap_category_list', 'Related Link Categories', 'redirmap_custom_box_html', 'post', 'side', 'low' );
 	 
 }
+*/
 
-
-/* Ordering meta box*/
+/* Ordering meta box
 function redirmap_order_meta_boxes($page, $context, $object) {
     
     if (($context == 'side') && (($page == 'page') || ($page == 'post')) ) {
@@ -122,9 +123,9 @@ function redirmap_order_meta_boxes($page, $context, $object) {
     }
     
 }
+*/
 
-
-/* Sort meta boxes */
+/* Sort meta boxes 
 function redirmap_position_metabox($id, $page = 'page', $context = 'side', $position = 1) {
 	//handle the recursion
 	static $been_here = false;
@@ -242,9 +243,9 @@ function redirmap_position_metabox($id, $page = 'page', $context = 'side', $posi
 	
 	}
 }
+*/
 
-
-/* Add code for the Page Edit custom box*/
+/* Add code for the Page Edit custom box
 function redirmap_custom_box_html() {
 	 //get previously selected categories
      global $post;
@@ -287,7 +288,7 @@ function redirmap_custom_box_html() {
 	<?php
 	 }
 }
-
+*/
 /* Save Related Link Categories*/
 function redirmap_save_postdata( $post_id ) {
 
@@ -338,7 +339,7 @@ function redirmap_save_postdata( $post_id ) {
 }
 
 
-/* Related Link widget*/
+/* Related Link widget
 class redirmap_Widget extends WP_Widget {
 	function redirmap_Widget() {
 		parent::WP_Widget(false, $name = 'Related Links');
@@ -466,7 +467,7 @@ class redirmap_Widget extends WP_Widget {
 }
 
 add_action('widgets_init', create_function('', 'return register_widget("redirmap_Widget");'));
-
+*/
 function redirmap_sort_category_links($links, $link_order = ''){
 	if(!isset($links) || !is_array($links)){
 		return array();
@@ -506,4 +507,5 @@ function redirmap_sort_category_links($links, $link_order = ''){
 	
 	return $links;
 }
+
 ?>
