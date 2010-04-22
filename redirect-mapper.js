@@ -10,13 +10,16 @@
 		{
 		current404: 0,
 		max404: 0,
+		currentSearchLink: '',
+		siteUrl: '',
 		init : function(){
 					if(rdmap("#redirmap-original-post-page").html() == null){
 						return;
 					}
 					var b=rdmapVerify;
 					b.max404 = js_404_links_list.length-1;
-					b.current404 = 0
+					b.current404 = 0;
+					b.siteUrl = js_siteUrl;
 					rdmap("#previous").click(function(){
 												var b=rdmapVerify;
 												if(b.current404 <= 0){
@@ -27,7 +30,7 @@
 												}
 												b.loadCurrentPage();
 												return true;
-											})
+											});
 					rdmap("#next").click(function(){
 												var b=rdmapVerify;
 												if(b.current404 >= b.max404){
@@ -38,7 +41,15 @@
 												}
 												b.loadCurrentPage();
 												return true;
-											})
+											});
+					rdmap("#search_button").click(function(){
+												rdmapVerify.searchPosts();
+												return true;
+											});
+					rdmap("#save_match").click(function(){
+												rdmapVerify.saveMatch();
+												return true;
+											});
 					//debugger;
 					b.loadCurrentPage();
 					return;
@@ -51,62 +62,45 @@
 						rdmap("#current-url").html(currentPage.original_url);
 						rdmap("#search").attr("value", currentPage.post_title);
 						rdmap("#redirmap-original-post-page").attr("data", currentPage.original_url);
-						//var theHTML = rdmap("#redirmap-original-post").html();
-						//rdmap("#redirmap-original-post-page").remove();
-						//rdmap("#redirmap-original-post").html(theHTML);
+						rdmap("#redirmap-search-results-list").html('');
+						rdmap("#redirmap-search-url-page").attr("data", '');
+						rdmap("#original_url").attr("value",'');
 					},
-		updateDefault : function(chx){
-						chx = rdmap(chx);
-						var catID = chx.attr("value");
-						var radio = rdmap("input.default_category_radio-"+catID);
-						if(chx.attr("checked")){
-							chx.addClass("selected");
-							radio.removeAttr("disabled");
-							if(rdmap("#rdmap_default_category").attr("value") == '0'){
-								radio.attr("checked", "checked");
-								rdmap("#rdmap_default_category").attr("value", catID);
-							}
-							
-							var linkOrder = rdmap("#rdmap_category_link_order_"+catID);
-							if(linkOrder.html() == null){
-								linkOrder = rdmap("#rdmap_category_link_order").clone(true);
-								rdmap(linkOrder).attr("id", "rdmap_category_link_order_"+catID);
-								var catIndex = rdmap(chx).attr("name").substr(28);
-								rdmap(linkOrder).attr("name", "rdmap_category_link_order"+catIndex);
-								var sortableLinks = rdmap("#category_links_list_"+catID);
-								rdmap(sortableLinks).sortable();
-								var linkOrderData = rdmap(sortableLinks).sortable('serialize');
-								rdmap(linkOrder).attr("value", linkOrderData);
-								var linkOrderPos = rdmap("#inline_list_"+catID);
-								rdmap(linkOrderPos).before(linkOrder);
-							}
-						}
-						else{
-							radio.attr("disabled", "disabled");
-							radio.removeAttr("checked");
-							chx.removeClass("selected");
-							
-							if(rdmap("#rdmap_default_category").attr("value") == catID){
-								this.findNewDefault();
-							}
-
-							var linkOrder = rdmap("#rdmap_category_link_order_"+catID);
-							if(linkOrder.html() !== null){
-								rdmap(linkOrder).remove();
-							}
-						}
+		searchPosts : function(){
+						var b=rdmapVerify;
+						rdmap("#redirmap-search-results-list").html('');
+						rdmap.ajax({
+								url:"/wp-admin/admin-ajax.php",
+								type:'GET',
+								data:'action=redirmap_action&s=' + rdmap("#search").attr("value"),
+								dataType: 'html',
+								success:function(result, status, XMLHttpRequest){
+											var r=result.split('||');
+											var s=rdmap("#redirmap-search-results-list");
+											s.html(r[0]);
+											rdmap("#ajax_busy").hide();
+											rdmapVerify.attachSearchLinkEvent(s);
+											return false;
+										}
+						});
+						rdmap("#ajax_busy").show();
 					},
-		findNewDefault : function(){
-						var chx =  rdmap("input.category_check.selected:first");
-						if(chx.html() !== null){
-							var catID = chx.attr("value");
-							var radio = rdmap("input.default_category_radio-"+catID);
-							radio.attr("checked", "checked");
-							rdmap("#rdmap_default_category").attr("value", catID);
-						}
-						else{
-							rdmap("#rdmap_default_category").attr("value", '0');
-						}
+		attachSearchLinkEvent : function(s){
+						var links=s.find("a.redirmap-search-link");
+						links.each(function(){
+								rdmap(this).click(function(){
+										var url = rdmap(this).attr("href");
+										rdmap("#redirmap-search-url-page").attr("data", url);
+										rdmapVerify.currentSearchLink = url;
+										return false;
+								});
+						});
+					},
+		saveMatch : function(){
+						var b=rdmapVerify;
+						rdmap("#original_url").attr("value", js_404_links_list[b.current404].original_slug);
+						var new_slug = b.currentSearchLink.replace(b.siteUrl, '');
+						rdmap("#search_match").attr("value", new_slug);
 					}
 					
 		};

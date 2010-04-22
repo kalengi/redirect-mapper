@@ -21,6 +21,10 @@ div#redirmap-search-post input.search-input{
 	width: 500px;
 }
 
+div#redirmap-search-post img#ajax_busy{
+	display: none;
+}
+
 div#redirmap-verify-post{
 	float: left;
 	margin-top: 15px;
@@ -64,7 +68,7 @@ div#redirmap-new-post  {
 	font-weight: 900;
 }
 
-div#redirmap-new-post embed#redirmap-search-url-page {
+div#redirmap-new-post object#redirmap-search-url-page {
 	width: 950px;
 	height: 400px;
 }

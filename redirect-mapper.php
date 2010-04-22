@@ -35,6 +35,8 @@ if ( is_admin() ) {
 	add_action('admin_head', 'redirmap_load_stylesheets');
 	//load js
 	add_action('wp_print_scripts', 'redirmap_load_scripts' );
+	//ajax handling
+	add_action('wp_ajax_redirmap_action', 'redirmap_ajax_callback');
 	
 	//hook into Page Edit screen
 	//add_action('admin_menu', 'redirmap_add_custom_box');
@@ -49,6 +51,51 @@ else{
 	
 }
 
+//ajax handling
+function redirmap_ajax_callback(){
+	global $wpdb;
+	
+	//check_ajax_referer( 'find-posts' );
+
+	if ( empty($_GET['s']) )
+		exit;
+
+	$what = 'post';
+	$s = stripslashes($_GET['s']);
+	preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
+	$search_terms = array_map(create_function('$a', 'return trim($a, "\\"\'\\n\\r ");'), $matches[0]);
+
+	$searchand = $search = '';
+	foreach( (array) $search_terms as $term) {
+		$term = addslashes_gpc($term);
+		$search .= "{$searchand}(($wpdb->posts.post_title LIKE '%{$term}%') OR ($wpdb->posts.post_content LIKE '%{$term}%'))";
+		$searchand = ' AND ';
+	}
+	$term = $wpdb->escape($s);
+	if ( count($search_terms) > 1 && $search_terms[0] != $s )
+		$search .= " OR ($wpdb->posts.post_title LIKE '%{$term}%') OR ($wpdb->posts.post_content LIKE '%{$term}%')";
+
+	$posts = $wpdb->get_results( "SELECT ID, post_title, post_status, post_date FROM $wpdb->posts WHERE post_type = '$what' AND $search ORDER BY post_date_gmt DESC LIMIT 50" );
+
+	$html = ''; 
+	if ( ! $posts ){
+		$html .= '<li>' . __('No posts found.') . '</li>' . "\r\n";
+	}
+	else{
+		foreach ( $posts as $post ) {
+			if($post->post_status == 'publish'){
+				$html .= '<li>'; 
+				$html .= '<a class="redirmap-search-link" href="' . get_permalink($post->ID) . '">';
+				$html .= esc_html( $post->post_title ) . '</a>';
+				$html .= '</li>' . "\r\n";
+			}
+		}
+		
+	}
+	$html .= '||';
+	echo $html;
+	return true;
+}
 
 /* Control Screen*/
 

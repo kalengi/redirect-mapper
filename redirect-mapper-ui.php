@@ -22,9 +22,15 @@
 	File Information: Redirect Mapper ui page
 */
 
-redirmap_settings_page();
+redirmap_ui_page();
 
-function redirmap_settings_page() {
+
+function redirmap_ui_page() {
+	
+	/*if (isset($_GET['s']) && $_GET['s']){
+		echo redirmap_ajax_callback();
+		die;
+	}*/
 	
 	if(!empty($_POST['uninstall'])) {
 		redirmap_remove_settings();
@@ -45,6 +51,7 @@ function redirmap_settings_page() {
 	
 	redirmap_show_settings_page();
 }
+
 
 function redirmap_remove_settings(){
 	if($_POST['uninstall'] == 'UNINSTALL Redirect Mapper'){
@@ -337,6 +344,7 @@ function get_404_links_list(){
 		$js_404_link = array();
 		$js_404_link[] = '"original_url":"' . str_replace('"', '\"', $_404_link[0]) . '"';
 		$js_404_link[] = '"new_url":"' . str_replace('"', '\"', $_404_link[1]) . '"';
+		$js_404_link[] = '"original_slug":"' . str_replace('"', '\"', $_404_link[3]) . '"';
 		$js_404_link[] = '"post_title":"' . str_replace('"', '\"', $_404_link[4]) . '"';
 		
 		$js_404_links[] = "{" . implode(",",$js_404_link) . "}";
@@ -358,6 +366,7 @@ function redirmap_show_verification_page() {
 		<script type="text/javascript">
 			//<![CDATA[ 
 				var js_404_links_list = <?php echo $js_404_links_list; ?>;
+				var js_siteUrl = '<?php echo get_bloginfo('url', 'display'); ?>';
 			//]]>
 		</script>
 	<?php
@@ -376,14 +385,14 @@ function redirmap_show_verification_page() {
 			<div id="redirmap-search-post" class="verify">
 				Search for post having text: 
 				<input type="text" id="search" class="search-input" name="search" value="" />
-				<input type="button" id="search_button" name="search_button" value="Search" class="button" onclick="return confirm('Search')" />
+				<input type="button" id="search_button" name="search_button" value="Search" class="button" />
+				<img src="<?php echo plugins_url('redirect-mapper/images/ajax_busy.gif'); ?>" id="ajax_busy"  alt="ajax busy"/>
 			</div>
 			<div id="redirmap-verify-post" class="verify">
 				<div id="redirmap-search-results" class="verify">
 					<p>Search results: </p>
-					<ul>
-						<li><a href="#">First search result</a></li>
-						<li><a href="#">Second search result</a></li>
+					<ul id="redirmap-search-results-list">
+						<li>No search done</li>
 					</ul>
 				</div>
 				<div id="redirmap-original-post" class="verify">
@@ -399,12 +408,12 @@ function redirmap_show_verification_page() {
 			</div>
 			<div id="redirmap-new-post" class="verify">
 				<p>Current search url page: </p>
-					<embed id="redirmap-search-url-page" src="" > 
+					<object id="redirmap-search-url-page" type="text/html" data="" > 
 						 
-					</embed>
+					</object>
 			</div>
 			<div id="redirmap-save-match" class="verify">
-				<input type="button" name="save_match" value="Save Match" class="button" onclick="return confirm('Save Match')" />
+				<input type="button" id="save_match" name="save_match" value="Get Links" class="button"  />
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Current search url: 
 				<input type="text" id="search_match" class="search-input" name="search_match" value="" />
