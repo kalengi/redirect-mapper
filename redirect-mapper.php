@@ -142,6 +142,7 @@ function redirmap_plugin_actions($links) {
 function redirmap_load_scripts() {
 	//wp_enqueue_script('inline-links-list', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/inline-links-list.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), '1.0');
 	wp_enqueue_script('redirect-mapper', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/redirect-mapper.js', array('jquery'), '1.0');
+	wp_enqueue_script('jquery.simplemodal', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/jquery.simplemodal-1.3.5.js', array('jquery'), '1.3.5');
 }
 
 /* Load css files*/

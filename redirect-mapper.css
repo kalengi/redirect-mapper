@@ -75,6 +75,43 @@ div#redirmap-new-post object#redirmap-search-url-page {
 
 /* @end */
 
+/*@ modal redirect mapping screen */
+
+#basic-modal-content {
+	display:none;
+}
+
+/* Overlay */
+#redirmap-overlay {
+	background-color:#ddd; 
+	cursor:wait;
+}
+
+#redirmap-container {
+	height:400px; 
+	width:720px; 
+	font: 16px/22px 'Trebuchet MS', Verdana, Arial; 
+	text-align:left; 
+	background:#fff; 
+	border:2px solid #336699;
+}
+
+#redirmap-container a.modalCloseImg {
+	background:url(images/x.png) no-repeat; 
+	width:25px; 
+	height:29px; 
+	display:inline; 
+	z-index:3200; 
+	position:absolute; 
+	top:-15px; 
+	right:-16px; 
+	cursor:pointer;
+}
+
+/* @end */
+
+
+
 /*@ messages */
 
 span.error_message{

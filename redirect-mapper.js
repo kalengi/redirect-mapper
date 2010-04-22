@@ -101,6 +101,11 @@
 						rdmap("#original_url").attr("value", js_404_links_list[b.current404].original_slug);
 						var new_slug = b.currentSearchLink.replace(b.siteUrl, '');
 						rdmap("#search_match").attr("value", new_slug);
+						rdmap('#basic-modal-content').modal({
+								overlayId: 'redirmap-overlay',
+								containerId: 'redirmap-container', 
+								opacity: 60
+						});
 					}
 					
 		};
