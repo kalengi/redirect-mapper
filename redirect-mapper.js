@@ -65,6 +65,7 @@
 						rdmap("#redirmap-search-results-list").html('');
 						rdmap("#redirmap-search-url-page").attr("data", '');
 						rdmap("#original_url").attr("value",'');
+						rdmap("#search_match").attr("value",'');
 					},
 		searchPosts : function(){
 						var b=rdmapVerify;
@@ -98,14 +99,52 @@
 					},
 		saveMatch : function(){
 						var b=rdmapVerify;
-						rdmap("#original_url").attr("value", js_404_links_list[b.current404].original_slug);
+						var originalSlug = js_404_links_list[b.current404].original_slug.replace('.shtml','');
+						rdmap("#original_url").attr("value", originalSlug);
 						var new_slug = b.currentSearchLink.replace(b.siteUrl, '');
 						rdmap("#search_match").attr("value", new_slug);
-						rdmap('#basic-modal-content').modal({
+						
+						rdmap('#redirmap-title').attr('value', js_404_links_list[b.current404].post_title);
+						rdmap('#old').attr('value', originalSlug);
+						rdmap('#redirmap-target').attr('value', new_slug);
+						
+						rdmap('#redirmap-map-url-redirect').modal({
 								overlayId: 'redirmap-overlay',
 								containerId: 'redirmap-container', 
 								opacity: 60
 						});
+						var f=rdmap("#redirmap-container form");
+						f.submit(function(){
+												rdmapVerify.submitRedirect(this);
+												return false;
+											});
+						
+					},
+		submitRedirect : function(f){
+						f=rdmap(f);
+						var data=f.serialize();
+						rdmap.ajax({
+								url: "/wp-admin/admin-ajax.php",
+								type: 'POST',
+								data: data,
+								dataType: 'html',
+								success:function(result, status, XMLHttpRequest){
+											debugger;
+											var s=rdmap("#info_message");
+											var r=result.replace('&#8203;','');
+											s.html(r);
+											var testUrl = s.find("a:last");
+											testUrl.attr("target", "_blank");
+											s.html('');
+											s.append(testUrl);
+											s.show();
+											rdmap("#redirmap_busy").hide();
+											return false;
+										}
+						});
+						rdmap("#redirmap-container input[name=save]").hide();
+						rdmap("#redirmap-container input[name=cancel]").hide();
+						rdmap("#redirmap_busy").show();
 					}
 					
 		};

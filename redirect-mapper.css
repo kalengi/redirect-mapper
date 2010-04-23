@@ -77,7 +77,7 @@ div#redirmap-new-post object#redirmap-search-url-page {
 
 /*@ modal redirect mapping screen */
 
-#basic-modal-content {
+#redirmap-map-url-redirect {
 	display:none;
 }
 
@@ -90,10 +90,10 @@ div#redirmap-new-post object#redirmap-search-url-page {
 #redirmap-container {
 	height:400px; 
 	width:720px; 
-	font: 16px/22px 'Trebuchet MS', Verdana, Arial; 
 	text-align:left; 
 	background:#fff; 
-	border:2px solid #336699;
+	border:2px solid #CCCCCC;
+	padding-left: 20px;
 }
 
 #redirmap-container a.modalCloseImg {
@@ -108,19 +108,52 @@ div#redirmap-new-post object#redirmap-search-url-page {
 	cursor:pointer;
 }
 
+div#redirmap-container h3{
+	color: #3C5FAC;
+	font-weight: 900;
+}
+
+div#redirmap-container .redirmap-form-field{
+	background-color: #FFFFFF;
+}
+
+div#redirmap-container img#redirmap_busy{
+	display: none;
+}
+
+div#redirmap-container table{
+	width: 680px;
+}
+
+div#redirmap-container th{
+	text-align: left;
+	width: 160px;
+}
+
+div#redirmap-container td{
+	border-bottom:8px solid #FFFFFF;
+}
+
 /* @end */
 
 
 
 /*@ messages */
 
-span.error_message{
+div#redirmap-container div#error_message{
 	color: red;
 	display: none;
 }
 
-span.info_message{
+div#redirmap-container div#info_message{
 	color: #7E7E7E;
+	margin-left:160px;
+	padding-left:10px;
+	display: none;
+}
+
+div#redirmap-container div#info_message a{
+	font-weight: 900;
 }
 
 /* @end */

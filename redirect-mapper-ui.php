@@ -427,15 +427,82 @@ function redirmap_show_verification_page() {
 		</div>
 		
 		<!-- modal content -->
-		<div id="basic-modal-content">
-			<h3>Basic Modal Dialog</h3>
-			<p>For this demo, SimpleModal is using this "hidden" data for its content. You can also populate the modal dialog with standard HTML or with DOM element(s).</p>
-			<p>Examples:</p>
-			<p><code>$('#basicModalContent').modal(); // jQuery object; this demo</code></p>
-			<p><code>$.modal(document.getElementById('basicModalContent')); // DOM</code></p>
-			<p><code>$.modal('&lt;p&gt;&lt;b&gt;HTML&lt;/b&gt; elements&lt;/p&gt;'); // HTML</code></p>
-		
-			<p><a href='http://www.ericmmartin.com/projects/simplemodal/'>More details...</a></p>
+		<div id="redirmap-map-url-redirect">
+			<form  method="post" accept-charset="utf-8" action="" style="padding: 3px">
+				<h3>Redirect URL </h3>
+				<table class="redirmap-form-fields" width="100%" >
+					<tbody>
+						<tr>
+							<th width="100">
+								Title:
+							</th>
+							<td>
+								<input class="redirmap-form-field" style="width: 85%" type="text" id="redirmap-title" name="title" value="test"/>
+								
+							</td>
+						</tr>
+						<tr>
+							<th width="100">
+								Source URL:
+							</th>
+							<td>
+								<input class="redirmap-form-field" type="text" name="source" style="width: 95%" id="old"/>
+							</td>
+						</tr>
+						<tr>
+							<th width="100">
+								Match redirection:
+							</th>
+							<td>
+								<select class="redirmap-form-field" name="match">
+									<option selected="selected" value="url">URL only</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th width="100">
+								Action:
+							</th>
+							<td>
+								<select class="redirmap-form-field" name="red_action">
+									<option value="url" selected="selected">Redirect to URL</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Target URL:
+							</th>
+							<td>
+								<input class="redirmap-form-field" style="width: 95%" type="text" id="redirmap-target" name="target" />
+							</td>
+						</tr>
+						<tr>
+							<th>HTTP Code:</th>
+							<td>
+								<select class="redirmap-form-field" name="action_code">
+									<option value="301" selected="selected">301 - Moved Permanently</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th/>
+							<td>
+								<input class="button-primary" type="submit" name="save" value="Save"/>
+								<input class="button-secondary" type="submit" name="cancel" value="Cancel"/>
+								<img src="<?php echo plugins_url('redirect-mapper/images/ajax_busy.gif'); ?>" id="redirmap_busy"  alt="redirect submitting"/>
+								<input type="hidden" name="regex"/>
+								<input type="hidden" name="group" value="1"/>
+								<input type="hidden" name="action" value="red_redirect_add"/>
+								<input type="hidden" name="_ajax_nonce" value="<?php echo wp_create_nonce( 'redirection-redirect_add' ); ?>"/>
+								
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+			<div id="error_message"></div>
+			<div id="info_message"><a href="<?php echo plugins_url('redirect-mapper/images/ajax_busy.gif'); ?>">nice url</a></div>
 		</div>
 		
 	<?php
