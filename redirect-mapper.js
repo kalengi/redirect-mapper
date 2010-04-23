@@ -131,7 +131,7 @@
 								success:function(result, status, XMLHttpRequest){
 											debugger;
 											var s=rdmap("#info_message");
-											var r=result.replace('&#8203;','');
+											var r=result.replace(/&#8203;/gi,'');
 											s.html(r);
 											var testUrl = s.find("a:last");
 											testUrl.attr("target", "_blank");

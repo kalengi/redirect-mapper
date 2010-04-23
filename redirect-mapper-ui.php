@@ -193,15 +193,13 @@ function redirmap_show_verification_page() {
 					</object>
 			</div>
 			<div id="redirmap-save-match" class="verify">
-				<input type="button" id="save_match" name="save_match" value="Get Links" class="button"  />
+				<input type="button" id="save_match" name="save_match" value="Map Url" class="button"  />
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Current search url: 
 				<input type="text" id="search_match" class="search-input" name="search_match" value="" />
-				<input type="button" name="copy_search_match" value="Copy" class="button" onclick="return confirm('Copy Search Match')" />
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Original url: 
 				<input type="text" id="original_url" class="search-input" name="original_url" value="" />
-				<input type="button" name="copy_original_url" value="Copy" class="button" onclick="return confirm('Copy Original Url')" />
 			</div>
 			
 		</div>
