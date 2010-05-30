@@ -3,7 +3,7 @@
 Plugin Name: Redirect Mapper 
 Plugin URI: http://www.dennisonwolfe.com/
 Description: The  Redirect Mapper plugin provides a visiual interface to aid the  mapping of old links to new links.
-Version: 1.0.0
+Version: 1.0.1
 Author: Dennison+Wolfe Internet Group
 Author URI: http://www.dennisonwolfe.com/
 */

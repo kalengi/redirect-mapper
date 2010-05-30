@@ -115,7 +115,16 @@ function get_404_links_list(){
 	//load 404 list
 	
 	$links_file = WP_CONTENT_DIR  . '/redirect-mapper/the_ojai_post_404_list.txt';
-	$contents = file_get_contents($links_file) or die("can't read from 404 list file");
+	//$contents = file_get_contents($links_file) or die("can't read from 404 list file");
+	$contents = file_get_contents($links_file);// or die("can't read from 404 list file");
+	if(empty($contents)){
+		$contents = 'http://www.ojaipost.com/' . '||';
+		$contents .= 'http://staging.ojaipost.com/' . '||';
+		$contents .= '404' . '||';
+		$contents .= '/index.php' . '||';
+		$contents .= 'No 404 links found' . "\r\n";
+	}
+	
 	$_404_links = explode("\r\n", $contents);
 	$js_404_links = array();
 	
