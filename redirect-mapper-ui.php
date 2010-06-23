@@ -111,50 +111,53 @@ function redirmap_show_settings_page() {
 	<?php
 }
 
-function get_404_links_list(){
-	//load 404 list
+function get_redirect_links_list(){
+	//load redirect list
 	
-	$links_file = WP_CONTENT_DIR  . '/redirect-mapper/the_ojai_post_404_list.txt';
+	$links_file = WP_CONTENT_DIR  . '/redirect-mapper/redirect_list.txt';
 	//$contents = file_get_contents($links_file) or die("can't read from 404 list file");
-	$contents = file_get_contents($links_file);// or die("can't read from 404 list file");
+	if(file_exists ($links_file )){
+		$contents = file_get_contents($links_file);// or die("can't read from 404 list file");
+	}
 	if(empty($contents)){
-		$contents = 'http://www.ojaipost.com/' . '||';
-		$contents .= 'http://staging.ojaipost.com/' . '||';
-		$contents .= '404' . '||';
-		$contents .= '/index.php' . '||';
-		$contents .= 'No 404 links found' . "\r\n";
+		$site_url = get_bloginfo('url');
+		$contents = $site_url . '||'; //source site
+		$contents .= $site_url . '||'; //target site
+		$contents .= '404' . '||'; //http error code
+		//$contents .= '/index.php' . '||'; //page
+		$contents .= 'No redirection links found' . "\r\n"; //page title
 	}
 	
-	$_404_links = explode("\r\n", $contents);
-	$js_404_links = array();
+	$_redirect_links = explode("\r\n", $contents);
+	$js_redirect_links = array();
 	
-	foreach($_404_links as $_404_link){
-		$_404_link = explode('||', $_404_link);
+	foreach($_redirect_links as $_redirect_link){
+		$_redirect_link = explode('||', $_redirect_link);
 		
-		$js_404_link = array();
-		$js_404_link[] = '"original_url":"' . str_replace('"', '\"', $_404_link[0]) . '"';
-		$js_404_link[] = '"new_url":"' . str_replace('"', '\"', $_404_link[1]) . '"';
-		$js_404_link[] = '"original_slug":"' . str_replace('"', '\"', $_404_link[3]) . '"';
-		$js_404_link[] = '"post_title":"' . str_replace('"', '\"', $_404_link[4]) . '"';
+		$js_redirect_link = array();
+		$js_redirect_link[] = '"original_url":"' . str_replace('"', '\"', $_redirect_link[0]) . '"';
+		$js_redirect_link[] = '"new_url":"' . str_replace('"', '\"', $_redirect_link[1]) . '"';
+		//$js_redirect_link[] = '"original_slug":"' . str_replace('"', '\"', $_redirect_link[3]) . '"';
+		$js_redirect_link[] = '"post_title":"' . str_replace('"', '\"', $_redirect_link[3]) . '"';
 		
-		$js_404_links[] = "{" . implode(",",$js_404_link) . "}";
+		$js_redirect_links[] = "{" . implode(",",$js_redirect_link) . "}";
 		
 	}	
 	
-	if(empty($js_404_links)){
-		die("The 404 list file is empty");
+	if(empty($js_redirect_links)){
+		die("The redirection links list is empty");
 	}
-	return '[' . implode(",", $js_404_links) . "]";
+	return '[' . implode(",", $js_redirect_links) . "]";
 	
 }
 
 function redirmap_show_verification_page() {
-	$js_404_links_list = get_404_links_list(); 
+	$js_redirect_links_list = get_redirect_links_list(); 
 	
 	?>
 		<script type="text/javascript">
 			//<![CDATA[ 
-				var js_404_links_list = <?php echo $js_404_links_list; ?>;
+				var js_redirect_links_list = <?php echo $js_redirect_links_list; ?>;
 				var js_siteUrl = '<?php echo get_bloginfo('url', 'display'); ?>';
 			//]]>
 		</script>
@@ -192,23 +195,24 @@ function redirmap_show_verification_page() {
 				</div>
 				
 			</div>
-			<div id="redirmap-matching-urls" class="verify">
-				
-			</div>
-			<div id="redirmap-new-post" class="verify">
-				<p>Current search url page: </p>
-					<object id="redirmap-search-url-page" type="text/html" data="" > 
-						 
-					</object>
-			</div>
+			
 			<div id="redirmap-save-match" class="verify">
 				<input type="button" id="save_match" name="save_match" value="Map Url" class="button"  />
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				Current search url: 
-				<input type="text" id="search_match" class="search-input" name="search_match" value="" />
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Original url: 
 				<input type="text" id="original_url" class="search-input" name="original_url" value="" />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				Target url: 
+				<input type="text" id="target_url" class="search-input" name="target_url" value="" />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" id="match_preview" name="match_preview" value="Preview" class="button"  />
+			</div>
+			
+			<div id="redirmap-new-post" class="verify">
+				<p>Target page: </p>
+				<object id="redirmap-search-url-page" type="text/html" data="" > 
+					 
+				</object>
 			</div>
 			
 		</div>
@@ -234,6 +238,7 @@ function redirmap_show_verification_page() {
 							</th>
 							<td>
 								<input class="redirmap-form-field" type="text" name="source" style="width: 95%" id="old"/>
+								<label>Regular expression: <input id="regex" type="checkbox" name="regex"/></label>
 							</td>
 						</tr>
 						<tr>
@@ -276,9 +281,8 @@ function redirmap_show_verification_page() {
 							<th/>
 							<td>
 								<input class="button-primary" type="submit" name="save" value="Save"/>
-								<input class="button-secondary" type="submit" name="cancel" value="Cancel"/>
+								<input class="button-secondary simplemodal-close" type="button" name="cancel" value="Cancel"/>
 								<img src="<?php echo plugins_url('redirect-mapper/images/ajax_busy.gif'); ?>" id="redirmap_busy"  alt="redirect submitting"/>
-								<input type="hidden" name="regex"/>
 								<input type="hidden" name="group" value="1"/>
 								<input type="hidden" name="action" value="red_redirect_add"/>
 								<input type="hidden" name="_ajax_nonce" value="<?php echo wp_create_nonce( 'redirection-redirect_add' ); ?>"/>

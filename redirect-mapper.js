@@ -1,6 +1,6 @@
 /*
  * Script for Redirect Mapper UI
- * Version:  1.0
+ * Version:  1.1
  * Author : Dennison+Wolfe Internet Group
  */ 
  
@@ -8,8 +8,8 @@
 	function(rdmap){
 		rdmapVerify = 
 		{
-		current404: 0,
-		max404: 0,
+		currentRedirect: 0,
+		maxRedirect: 0,
 		currentSearchLink: '',
 		siteUrl: '',
 		init : function(){
@@ -17,27 +17,27 @@
 						return;
 					}
 					var b=rdmapVerify;
-					b.max404 = js_404_links_list.length-1;
-					b.current404 = 0;
+					b.maxRedirect = js_redirect_links_list.length-1;
+					b.currentRedirect = 0;
 					b.siteUrl = js_siteUrl;
 					rdmap("#previous").click(function(){
 												var b=rdmapVerify;
-												if(b.current404 <= 0){
-													b.current404 = 0;
+												if(b.currentRedirect <= 0){
+													b.currentRedirect = 0;
 												}
 												else{
-													b.current404--;
+													b.currentRedirect--;
 												}
 												b.loadCurrentPage();
 												return true;
 											});
 					rdmap("#next").click(function(){
 												var b=rdmapVerify;
-												if(b.current404 >= b.max404){
-													b.current404 = b.max404;
+												if(b.currentRedirect >= b.maxRedirect){
+													b.currentRedirect = b.maxRedirect;
 												}
 												else{
-													b.current404++;
+													b.currentRedirect++;
 												}
 												b.loadCurrentPage();
 												return true;
@@ -50,22 +50,40 @@
 												rdmapVerify.saveMatch();
 												return true;
 											});
-					//debugger;
+					rdmap("#match_preview").click(function(){
+												rdmapVerify.loadManualLinkPages();
+												return true;
+											});
+					
 					b.loadCurrentPage();
 					return;
 					
 				},
 		loadCurrentPage : function(){
-						//debugger
+						
 						var b=this;
-						var currentPage = js_404_links_list[b.current404];
-						rdmap("#current-url").html(currentPage.original_url);
-						rdmap("#search").attr("value", currentPage.post_title);
+						var currentPage = js_redirect_links_list[b.currentRedirect];
+						rdmap("#current-url").html(currentPage.post_title);
 						rdmap("#redirmap-original-post-page").attr("data", currentPage.original_url);
 						rdmap("#redirmap-search-results-list").html('');
-						rdmap("#redirmap-search-url-page").attr("data", '');
-						rdmap("#original_url").attr("value",'');
-						rdmap("#search_match").attr("value",'');
+						rdmap("#redirmap-search-url-page").attr("data", currentPage.new_url);
+						rdmap("#original_url").attr("value",currentPage.original_url);
+						rdmap("#target_url").attr("value",currentPage.new_url);
+					},
+		loadManualLinkPages : function(){
+						var originalPage = '';  
+						var targetPage = '';  
+						
+						if(rdmap("#original_url").html() !== null){
+							originalPage = rdmap("#original_url").attr("value");
+						}
+						rdmap("#redirmap-original-post-page").attr("data", originalPage);
+						
+						if(rdmap("#target_url").html() !== null){
+							targetPage = rdmap("#target_url").attr("value");
+						}
+						rdmap("#redirmap-search-url-page").attr("data", targetPage);
+						
 					},
 		searchPosts : function(){
 						var b=rdmapVerify;
@@ -92,6 +110,7 @@
 								rdmap(this).click(function(){
 										var url = rdmap(this).attr("href");
 										rdmap("#redirmap-search-url-page").attr("data", url);
+										rdmap("#target_url").attr("value", url);
 										rdmapVerify.currentSearchLink = url;
 										return false;
 								});
@@ -99,14 +118,9 @@
 					},
 		saveMatch : function(){
 						var b=rdmapVerify;
-						var originalSlug = js_404_links_list[b.current404].original_slug.replace('.shtml','');
-						rdmap("#original_url").attr("value", originalSlug);
-						var new_slug = b.currentSearchLink.replace(b.siteUrl, '');
-						rdmap("#search_match").attr("value", new_slug);
-						
-						rdmap('#redirmap-title').attr('value', js_404_links_list[b.current404].post_title);
-						rdmap('#old').attr('value', originalSlug);
-						rdmap('#redirmap-target').attr('value', new_slug);
+						rdmap('#redirmap-title').attr('value', js_redirect_links_list[b.currentRedirect].post_title);
+						rdmap('#old').attr('value', rdmap("#original_url").attr("value"));
+						rdmap('#redirmap-target').attr('value', rdmap("#target_url").attr("value"));
 						
 						rdmap('#redirmap-map-url-redirect').modal({
 								overlayId: 'redirmap-overlay',
@@ -118,7 +132,6 @@
 												rdmapVerify.submitRedirect(this);
 												return false;
 											});
-						
 					},
 		submitRedirect : function(f){
 						f=rdmap(f);
@@ -129,7 +142,6 @@
 								data: data,
 								dataType: 'html',
 								success:function(result, status, XMLHttpRequest){
-											debugger;
 											var s=rdmap("#info_message");
 											var r=result.replace(/&#8203;/gi,'');
 											s.html(r);

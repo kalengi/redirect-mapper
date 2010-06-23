@@ -3,7 +3,7 @@
 Plugin Name: Redirect Mapper 
 Plugin URI: http://www.dennisonwolfe.com/
 Description: The  Redirect Mapper plugin provides a visiual interface to aid the  mapping of old links to new links.
-Version: 1.0.1
+Version: 1.1.0
 Author: Dennison+Wolfe Internet Group
 Author URI: http://www.dennisonwolfe.com/
 */
@@ -54,7 +54,7 @@ function redirmap_ajax_callback(){
 	if ( empty($_GET['s']) )
 		exit;
 
-	$what = 'post';
+	$what = "('post','page')";
 	$s = stripslashes($_GET['s']);
 	preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
 	$search_terms = array_map(create_function('$a', 'return trim($a, "\\"\'\\n\\r ");'), $matches[0]);
@@ -69,7 +69,8 @@ function redirmap_ajax_callback(){
 	if ( count($search_terms) > 1 && $search_terms[0] != $s )
 		$search .= " OR ($wpdb->posts.post_title LIKE '%{$term}%') OR ($wpdb->posts.post_content LIKE '%{$term}%')";
 
-	$posts = $wpdb->get_results( "SELECT ID, post_title, post_status, post_date FROM $wpdb->posts WHERE post_type = '$what' AND $search ORDER BY post_date_gmt DESC LIMIT 50" );
+	//$posts = $wpdb->get_results( "SELECT ID, post_title, post_status, post_date FROM $wpdb->posts WHERE post_type = '$what' AND $search ORDER BY post_date_gmt DESC LIMIT 50" );
+	$posts = $wpdb->get_results( "SELECT ID, post_title, post_status, post_date FROM $wpdb->posts WHERE post_type IN $what AND $search ORDER BY post_date_gmt DESC " );
 
 	$html = ''; 
 	if ( ! $posts ){
