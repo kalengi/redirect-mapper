@@ -115,20 +115,20 @@ function get_redirect_links_list(){
 	//load redirect list
 	
 	$links_file = WP_CONTENT_DIR  . '/redirect-mapper/redirect_list.txt';
-	//$contents = file_get_contents($links_file) or die("can't read from 404 list file");
-	if(file_exists ($links_file )){
+	$contents = '';
+	if(is_readable($links_file )){
 		$contents = file_get_contents($links_file);// or die("can't read from 404 list file");
 	}
+	
 	if(empty($contents)){
 		$site_url = get_bloginfo('url');
 		$contents = $site_url . '||'; //source site
 		$contents .= $site_url . '||'; //target site
 		$contents .= '404' . '||'; //http error code
-		//$contents .= '/index.php' . '||'; //page
-		$contents .= 'No redirection links found' . "\r\n"; //page title
+		$contents .= 'No redirection links found' . PHP_EOL; //page title
 	}
 	
-	$_redirect_links = explode("\r\n", $contents);
+	$_redirect_links = explode(PHP_EOL, $contents);
 	$js_redirect_links = array();
 	
 	foreach($_redirect_links as $_redirect_link){
@@ -137,7 +137,6 @@ function get_redirect_links_list(){
 		$js_redirect_link = array();
 		$js_redirect_link[] = '"original_url":"' . str_replace('"', '\"', $_redirect_link[0]) . '"';
 		$js_redirect_link[] = '"new_url":"' . str_replace('"', '\"', $_redirect_link[1]) . '"';
-		//$js_redirect_link[] = '"original_slug":"' . str_replace('"', '\"', $_redirect_link[3]) . '"';
 		$js_redirect_link[] = '"post_title":"' . str_replace('"', '\"', $_redirect_link[3]) . '"';
 		
 		$js_redirect_links[] = "{" . implode(",",$js_redirect_link) . "}";
